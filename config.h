@@ -26,18 +26,18 @@
 #define PULSE_PERIOD 	1000
 #define PUMP_PERIOD 	100
 
-#define REVERSE_LOGIC 0
+#define REVERSE_LOGIC 1
 
 #if REVERSE_LOGIC
-#define high LOW
-#define low HIGH
+#define RELAY_CLOSED 	LOW
+#define RELAY_OPEN 		HIGH
 #else
-#define high LOW
-#define low HIGH
+#define RELAY_CLOSED 	LOW
+#define RELAY_OPEN 		HIGH
 #endif
 
 /* During the bootup process should the arrows be lit or not */
-#define ARROW_START_STATE high
+#define ARROW_START_STATE RELAY_CLOSED
 
 
 #endif

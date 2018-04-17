@@ -37,12 +37,13 @@ Arrow::Arrow(int green_pin, int orange_pin)
 	_green = green_pin;
 	_orange = orange_pin;
 
+	/* see http://arduino-info.wikispaces.com/ArduinoPower#4-8 */
+	digitalWrite(_green, ARROW_START_STATE);
+	digitalWrite(_orange, ARROW_START_STATE);
 	pinMode(_green, OUTPUT);
 	pinMode(_orange, OUTPUT);
 
 	_state = ARROW_STOP;
-	digitalWrite(_green, ARROW_START_STATE);
-	digitalWrite(_orange, ARROW_START_STATE);
 }
 
 void Arrow::go()
@@ -70,31 +71,31 @@ void Arrow::run()
 	switch(_state)
 	{
 		case ARROW_GO:
-		digitalWrite(_orange, low);
+		digitalWrite(_orange, RELAY_OPEN);
 		if(_flash_timer->expired())
 		{
 			_flash_timer->restart();
 			if(green_is_on)
 			{
-				digitalWrite(_green, low);
+				digitalWrite(_green, RELAY_OPEN);
 			}
 			else
 			{
-				digitalWrite(_green, high);
+				digitalWrite(_green, RELAY_CLOSED);
 			}
 			green_is_on = !green_is_on;
 		}
 		break;
 
 		case ARROW_CAUTION:
-		digitalWrite(_green, low);
-		digitalWrite(_orange, high);
+		digitalWrite(_green, RELAY_OPEN);
+		digitalWrite(_orange, RELAY_CLOSED);
 		break;
 
 		default:
 		case ARROW_STOP:
-		digitalWrite(_green, low);
-		digitalWrite(_orange, low);
+		digitalWrite(_green, RELAY_OPEN);
+		digitalWrite(_orange, RELAY_OPEN);
 		break;
 
 	}

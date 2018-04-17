@@ -34,6 +34,10 @@ light::light(int green_pin, int orange_pin, int red_pin)
 	_orange = orange_pin;
 	_red = red_pin;
 
+	digitalWrite(_green, RELAY_OPEN);
+	digitalWrite(_orange, RELAY_OPEN);
+	digitalWrite(_red, RELAY_OPEN);
+
 	pinMode(_green, OUTPUT);
 	pinMode(_orange, OUTPUT);
 	pinMode(_red, OUTPUT);
@@ -61,7 +65,7 @@ void light::turnOn(COLOURS colour)
 		break;
 	}
 	if(pin != -1)
-		digitalWrite(pin, high);
+		digitalWrite(pin, RELAY_CLOSED);
 }
 
 void light::turnOff(COLOURS colour)
@@ -86,7 +90,7 @@ void light::turnOff(COLOURS colour)
 		break;
 	}
 	if(pin != -1)
-		digitalWrite(pin, low);
+		digitalWrite(pin, RELAY_OPEN);
 }
 
 void light::go(void)
