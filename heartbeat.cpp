@@ -47,18 +47,21 @@ Heartbeat::init(int pin)
 void Heartbeat::boot()
 {
   _state = err_boot;
+  digitalWrite(_pin, LOW);
   _pulse_timer->reset(250);
 }
 
 void Heartbeat::normal()
 {
   _state = err_normal;
+  digitalWrite(_pin, LOW);
   _pulse_timer->reset(PULSE_PERIOD);
 }
 
 void Heartbeat::error(int errorCode)
 {
   _state = errorCode;
+  digitalWrite(_pin, LOW);
   _pulse_timer->reset(PULSE_PERIOD);
 }
 

@@ -22,14 +22,20 @@
 #include "Arduino.h"
 #include "timer.h"
 
-Timer *timerList[MAX_TIMERS];
+typedef struct 
+{
+	Timer* px_timer;
+	bool occupied;
+}TIMER_LIST_ENTRY;
+
+TIMER_LIST_ENTRY timerList[MAX_TIMERS];
 int freeSlots;
 
 void initTimerModule()
 {
 	for(int i = 0 ; i < MAX_TIMERS ; i++)
 	{
-		timerList[i] = NULL;
+		timerList[i].occupied = false;
 	}
 	freeSlots = MAX_TIMERS;
 }
@@ -38,36 +44,38 @@ void timerModuleTick(int milliseconds)
 {
 	for(int i = 0 ; i < MAX_TIMERS ; i++)
 	{
-		if(NULL != timerList[i])
-			timerList[i]->tick(milliseconds);
+		if(false != timerList[i].occupied)
+			timerList[i].px_timer->tick(milliseconds);
 	}
 }
 
 Timer* Timer::create(int period)
 {
-	if(0 == freeSlots)
+	if(0 < freeSlots)
 	{
-		return NULL;
+		return new Timer(period);
 	}
 
-	return new Timer(period);
+	return NULL;
 }
 
 Timer::Timer(int period)
 {
 	_period = period;
-	_running = true;
 	_expired = false;
 	_count = 0;
 	_index = -1;
 
 	for(int i = 0 ; i < MAX_TIMERS ; i++)
 	{
-		if(NULL == timerList[i])
+		if(false == timerList[i].occupied)
 		{
-			timerList[i] = this;
+			timerList[i].px_timer = this;
+			timerList[i].occupied = true;
 			_index = i;
 			freeSlots--;
+			_running = true;
+			return;
 		}
 	}
 }
@@ -76,7 +84,7 @@ Timer::~Timer()
 {
 	if(_index >= 0)
 	{
-		timerList[_index] = NULL;
+		timerList[_index].occupied = false;
 		freeSlots++;
 	}
 }
@@ -86,6 +94,7 @@ void Timer::tick(int milliseconds)
 	if(_running && !_expired)
 	{
 		_count += milliseconds;
+
 		if(_count >= _period)
 		{
 			_expired = true;
@@ -106,6 +115,7 @@ void Timer::stop()
 void Timer::restart()
 {
 	stop();
+	_expired = false;
 	_count = 0;
 	start();
 }
@@ -113,6 +123,7 @@ void Timer::restart()
 void Timer::reset(int period)
 {
 	stop();
+	_expired = false;
 	_period = period;
 	_count = 0;
 	start();

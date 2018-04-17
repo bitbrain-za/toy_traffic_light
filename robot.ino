@@ -46,24 +46,25 @@ void isr_sys_tick();
 
 void setup() 
 {
-	/* Psuedo random is fine, no need to use AN */
-	randomSeed(0x7062);
+  /* Psuedo random is fine, no need to use AN */
+  randomSeed(0x7062);
 
-	/* HW timer used as base tick for sys timers */
+  /* HW timer used as base tick for sys timers */
   Timer1.initialize(SYS_TICK * 1000);
   Timer1.attachInterrupt( isr_sys_tick );
-	initTimerModule();
-	Heartbeat::init(LED_BUILTIN);
-	robot::init();
+  initTimerModule();
+  Heartbeat::init(LED_BUILTIN);
+  robot::init();
 }
 
 void loop() 
 {
-	Heartbeat::pump();
+  Heartbeat::pump();
   robot::run();
 }
 
 void isr_sys_tick()
 {
-	timerModuleTick(SYS_TICK);
+  static int count = 0;
+  timerModuleTick(SYS_TICK);
 }
