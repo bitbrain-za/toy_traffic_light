@@ -24,11 +24,25 @@
 #include "timer.h"
 #include "arrow.h"
 
+
+/*! \fn Arrow* Arrow::create(int green_pin, int orange_pin)
+    \brief Factory method for the arrow class, initialises
+    with green and orange pins.
+    Green will flash, orange is constant
+    \param green_pin The pin to the Green Arrow
+    \param orange_pin The pin to the Orange Arrow
+    \retval pointer to the new instance
+*/
 Arrow* Arrow::create(int green_pin, int orange_pin)
 {
 	return new Arrow(green_pin, orange_pin);
 }
 
+/*! \fn Arrow::Arrow(int green_pin, int orange_pin)
+    \brief Arrow class constructor, use the factory method instead
+    \param green_pin The pin to the Green Arrow
+    \param orange_pin The pin to the Orange Arrow
+*/
 Arrow::Arrow(int green_pin, int orange_pin)
 {
 	_flash_timer = Timer::create(FLASH_TIME);
@@ -46,24 +60,42 @@ Arrow::Arrow(int green_pin, int orange_pin)
 	_state = ARROW_STOP;
 }
 
+/*! \fn void Arrow::go()
+    \brief Triggers the go state:
+    	- Green Arrow flashes
+    	- Orange Arrow off
+*/
 void Arrow::go()
 {
 	_state = ARROW_GO;
 	_flash_timer->restart();
 }
 
+/*! \fn void Arrow::caution()
+    \brief Triggers the caution state:
+    	- Green Arrow off
+    	- Orange Arrow on
+*/
 void Arrow::caution()
 {
 	_state = ARROW_CAUTION;
 	_flash_timer->stop();
 }
 
+/*! \fn void Arrow::stop()
+    \brief Triggers the stop state:
+    	- Green Arrow off
+    	- Orange Arrow off
+*/
 void Arrow::stop()
 {
 	_state = ARROW_STOP;
 	_flash_timer->stop();
 }
 
+/*! \fn void Arrow::run()
+    \brief FSM for the arrow. Run in the main loop
+*/
 void Arrow::run()
 {
 	static bool green_is_on = false;

@@ -1,27 +1,9 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-
 #define SYS_TICK 1 	/* milliseconds */
 
-#define D2 32
-#define D3 1
-#define D4 2
-#define D5 9
-#define D6 10
-#define D7 11
-#define D8 12
-#define D9 13
-
-// #define RELAY_1 D2
-// #define RELAY_2 D3
-// #define RELAY_3 D4
-// #define RELAY_4 D5
-// #define RELAY_5 D6
-// #define RELAY_6 D7
-// #define RELAY_7 D8
-// #define RELAY_8 D9
-
+/* Relay Pins */
 #define RELAY_1 2
 #define RELAY_2 3
 #define RELAY_3 4
@@ -31,7 +13,7 @@
 #define RELAY_7 8
 #define RELAY_8 9
 
-/* Relay Pins */
+/* Relay to Light signals */
 #define LIGHT1_G 	RELAY_1
 #define LIGHT1_O 	RELAY_2
 #define LIGHT1_R 	RELAY_3

@@ -23,11 +23,25 @@
 #include "config.h"
 #include "light.h"
 
+/*! \fn light* light::create(int green_pin, int orange_pin, int red_pin)
+    \brief Factory method for the light class, initialises
+    a traffic light with green, orange and red pins
+    \param green_pin The pin to the Green Light
+    \param orange_pin The pin to the Orange Light
+    \param red_pin The pin to the red Light
+    \retval pointer to the new instance
+*/
 light* light::create(int green_pin, int orange_pin, int red_pin)
 {
 	return new light(green_pin, orange_pin, red_pin);
 }
 
+/*! \fn light::light(int green_pin, int orange_pin)
+    \brief light class constructor, use the factory method instead
+    \param green_pin The pin to the Green Light
+    \param orange_pin The pin to the Orange Light
+    \param red_pin The pin to the red Light
+*/
 light::light(int green_pin, int orange_pin, int red_pin)
 {
 	_green = green_pin;
@@ -43,6 +57,10 @@ light::light(int green_pin, int orange_pin, int red_pin)
 	pinMode(_red, OUTPUT);
 }
 
+/*! \fn void light::turnOn(COLOURS colour)
+    \brief Turns the specified light on
+    \param colour which light to turn on
+*/
 void light::turnOn(COLOURS colour)
 {
 	int pin;
@@ -68,6 +86,10 @@ void light::turnOn(COLOURS colour)
 		digitalWrite(pin, RELAY_CLOSED);
 }
 
+/*! \fn void light::turnOff(COLOURS colour)
+    \brief Turns the specified light Off
+    \param colour which light to turn Off
+*/
 void light::turnOff(COLOURS colour)
 {
 	int pin;
@@ -93,6 +115,9 @@ void light::turnOff(COLOURS colour)
 		digitalWrite(pin, RELAY_OPEN);
 }
 
+/*! \fn void light::go()
+    \brief Triggers the go state:
+*/
 void light::go(void)
 {
 	turnOn(GREEN);
@@ -100,6 +125,9 @@ void light::go(void)
 	turnOff(RED);
 }
 
+/*! \fn void light::slow()
+    \brief Triggers the slow state:
+*/
 void light::slow(void)
 {
 	turnOff(GREEN);
@@ -107,6 +135,9 @@ void light::slow(void)
 	turnOff(RED);
 }
 
+/*! \fn void light::stop()
+    \brief Triggers the stop state:
+*/
 void light::stop(void)
 {
 	turnOff(GREEN);
